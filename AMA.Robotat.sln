@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMA.Robotat.Mvc", "AMA.Robotat.Mvc\AMA.Robotat.Mvc.csproj", "{8DBC9EC0-9ED8-4387-884B-399F36619A33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMA.Robotat.Entities", "AMA.Robotat.Entities\AMA.Robotat.Entities.csproj", "{5B524B94-4E24-4D44-8594-E9E8BC7EA100}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMA.Robotat.Utils", "AMA.Robotat.Utils\AMA.Robotat.Utils.csproj", "{2614AB9F-18BE-4435-A071-E6DC1D1F4714}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{8DBC9EC0-9ED8-4387-884B-399F36619A33}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DBC9EC0-9ED8-4387-884B-399F36619A33}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DBC9EC0-9ED8-4387-884B-399F36619A33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B524B94-4E24-4D44-8594-E9E8BC7EA100}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B524B94-4E24-4D44-8594-E9E8BC7EA100}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B524B94-4E24-4D44-8594-E9E8BC7EA100}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B524B94-4E24-4D44-8594-E9E8BC7EA100}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2614AB9F-18BE-4435-A071-E6DC1D1F4714}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2614AB9F-18BE-4435-A071-E6DC1D1F4714}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2614AB9F-18BE-4435-A071-E6DC1D1F4714}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2614AB9F-18BE-4435-A071-E6DC1D1F4714}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

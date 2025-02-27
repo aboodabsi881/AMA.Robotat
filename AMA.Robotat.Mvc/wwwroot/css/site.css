@@ -20,3 +20,8 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.data-tables th,
+.data-tables td{
+    text-align : left !important;
+}

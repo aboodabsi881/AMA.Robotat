@@ -1,7 +1,6 @@
 using AMA.Robotat.Mvc.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
 namespace AMA.Robotat.Mvc
 {
     public class Program
@@ -18,6 +17,9 @@ namespace AMA.Robotat.Mvc
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            builder.Services.AddAutoMapper(typeof(Program));
+
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();

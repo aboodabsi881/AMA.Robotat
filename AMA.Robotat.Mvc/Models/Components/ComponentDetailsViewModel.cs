@@ -10,6 +10,5 @@ namespace AMA.Robotat.Mvc.Models.Components
         [Column(TypeName = "decimal(6,2)")]//9999.99
         public decimal Price { get; set; }
         public string Description { get; set; }
-        public List<Robot> Robots { get; set; } = [];
     }
 }

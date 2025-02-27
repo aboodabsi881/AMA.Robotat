@@ -1,6 +1,6 @@
-﻿using AMA.Robotat.Mvc.Models.Components;
+﻿using AMA.Robotat.Entities.Components;
+using AMA.Robotat.Mvc.Models.Components;
 using AutoMapper;
-using System.ComponentModel;
 
 namespace AMA.Robotat.Mvc.AutoMapperProfiles
 {

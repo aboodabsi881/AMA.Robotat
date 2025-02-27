@@ -40,13 +40,14 @@ namespace AMA.Robotat.Mvc.Controllers
                 return NotFound();
             }
 
-            var component = await _context.Components
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var component = await _context
+                                    .Components
+                                        .FindAsync(id);
             if (component == null)
             {
                 return NotFound();
             }
-
+            var componentVM = _mapper.Map<ComponentDetailsViewModel>(component);
             return View(component);
         }
 
@@ -57,15 +58,19 @@ namespace AMA.Robotat.Mvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,Description")] Component component)
+        public async Task<IActionResult> Create(CreateUpdateComponentViewModel createUpdateComponentVM)
         {
             if (ModelState.IsValid)
             {
+                var component = _mapper.Map<Component>(createUpdateComponentVM);
+
+
                 _context.Add(component);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(component);
+            return View(createUpdateComponentVM);
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -75,76 +80,75 @@ namespace AMA.Robotat.Mvc.Controllers
                 return NotFound();
             }
 
-            var component = await _context.Components.FindAsync(id);
+            var component = await _context
+                                    .Components
+                                        .FindAsync(id);
+
             if (component == null)
             {
                 return NotFound();
             }
-            return View(component);
+
+            var createUpdateComponentVM = _mapper.Map<CreateUpdateComponentViewModel>(component);
+
+            return View(createUpdateComponentVM);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Description")] Component component)
+        public async Task<IActionResult> Edit(int id, CreateUpdateComponentViewModel createUpdateComponentVM)
         {
-            if (id != component.Id)
+            if (id != createUpdateComponentVM.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
+                //Get Component from DB
+                var component = await _context
+                                    .Components
+                                        .FindAsync(id);
+
+                if(component==null)
                 {
-                    _context.Update(component);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ComponentExists(component.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+
+                //Patch (Copy) createUpdateComponentVM in to the component
+                _mapper.Map(createUpdateComponentVM, component);
+
+                //Add to update in the context and save
+                _context.Update(component);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
+
+
             }
-            return View(component);
+            return View(createUpdateComponentVM);
         }
 
-        // GET: Components/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var component = await _context.Components
-                .FirstOrDefaultAsync(m => m.Id == id);
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id) // 1 => Arduino Uno
+        {
+            var component = await _context
+                                        .Components
+                                        .FindAsync(id); //Get Arduino Uno
+
             if (component == null)
             {
-                return NotFound();
-            }
+                return RedirectToAction(nameof(Index));
+                
+            } //If Arduino is not  in the DB return to Index Page
 
-            return View(component);
-        }
+            _context.Components.Remove(component); //Remove  Arduino Uno memory
 
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var component = await _context.Components.FindAsync(id);
-            if (component != null)
-            {
-                _context.Components.Remove(component);
-            }
+            await _context.SaveChangesAsync(); //Confirm deleting Arduino frem DB
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index)); // Return to Index page
         }
 
         private bool ComponentExists(int id)

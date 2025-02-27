@@ -53,6 +53,7 @@ namespace AMA.Robotat.Mvc.Controllers
 
         public IActionResult Create()
         {
+
             return View();
         }
 

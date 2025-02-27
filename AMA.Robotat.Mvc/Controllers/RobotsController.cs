@@ -39,20 +39,25 @@ namespace AMA.Robotat.Mvc.Controllers
                 return NotFound();
             }
 
+
             var robot = await _context.Robots
-                .FirstOrDefaultAsync(m => m.Id == id);
+                                        .Include(robot => robot.Components)
+                                        .Where(robot => robot.Id == id)
+                                        .SingleOrDefaultAsync();
             if (robot == null)
             {
                 return NotFound();
             }
 
-            return View(robot);
+            var robotDetailsVM = _mapper.Map<RobotDetailsViewModel>(robot);
+
+            return View(robotDetailsVM);
         }
 
         public IActionResult Create()
         {
             var createUpdateRobotVM = new CreateUpdateRobotViewModel();
-            createUpdateRobotVM.Components = new MultiSelectList(_context.Components,"Id","Name");
+            createUpdateRobotVM.ComponentLookup = new MultiSelectList(_context.Components,"Id","Name");
             return View(createUpdateRobotVM);
         }
 
@@ -74,7 +79,7 @@ namespace AMA.Robotat.Mvc.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            createUpdateRobotVM.Components = new MultiSelectList(_context.Components, "Id", "Name");
+            createUpdateRobotVM.ComponentLookup = new MultiSelectList(_context.Components, "Id", "Name");
             return View(createUpdateRobotVM);
         }
 
@@ -85,44 +90,63 @@ namespace AMA.Robotat.Mvc.Controllers
                 return NotFound();
             }
 
-            var robot = await _context.Robots.FindAsync(id);
+            var robot = await _context
+                                        .Robots
+                                        .Include(robot => robot.Components)
+                                        .Where(robot => robot.Id == id)
+                                        .SingleOrDefaultAsync();
+
             if (robot == null)
             {
                 return NotFound();
             }
-            return View(robot);
+
+            var createUpdateRobotVM = _mapper.Map<CreateUpdateRobotViewModel>(robot);
+            createUpdateRobotVM.ComponentLookup = new MultiSelectList(_context.Components, "Id", "Name");
+
+            return View(createUpdateRobotVM);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Description")] Robot robot)
+        public async Task<IActionResult> Edit(int id, CreateUpdateRobotViewModel createUpdateRobotVM)
         {
-            if (id != robot.Id)
+            if (id != createUpdateRobotVM.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
+
+                //Get Component from DB
+                var robot = await _context
+                                    .Robots
+                                    .Include(robot => robot.Components)
+                                        .Where(robot => robot.Id == id)
+                                        .SingleOrDefaultAsync();
+
+                if (robot == null)
                 {
-                    _context.Update(robot);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RobotExists(robot.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+
+                //Patch (Copy) createUpdateComponentVM in to the component
+                _mapper.Map(createUpdateRobotVM, robot);
+
+                //Update Robot Components
+                await UpdateRobotComponents(robot,createUpdateRobotVM.ComponentsIds);
+
+                //Sell Robot Price
+                robot.Price = GetRobotPrice(robot.Components);
+
+                _context.Update(robot);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(robot);
+            createUpdateRobotVM.ComponentLookup = new MultiSelectList(_context.Components, "Id", "Name");
+            return View(createUpdateRobotVM);
         }
 
 

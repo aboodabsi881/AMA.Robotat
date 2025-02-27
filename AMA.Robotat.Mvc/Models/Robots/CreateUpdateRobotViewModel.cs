@@ -17,6 +17,6 @@ namespace AMA.Robotat.Mvc.Models.Meals
         public List<int> ComponentsIds { get; set; } = [];
 
         [ValidateNever]
-        public MultiSelectList Components { get; set; }
+        public MultiSelectList ComponentLookup { get; set; }
     }
 }

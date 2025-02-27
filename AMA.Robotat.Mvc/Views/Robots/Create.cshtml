@@ -21,7 +21,7 @@
 
             <div class="form-group mb-3">
                 <label asp-for="ComponentsIds" class="control-label"></label>
-                <select asp-for="ComponentsIds" asp-items="@Model.Components" class="form-control"></select>
+                <select asp-for="ComponentsIds" asp-items="@Model.ComponentLookup" class="form-control select-2"></select>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 

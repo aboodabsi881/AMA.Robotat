@@ -35,13 +35,13 @@
            
             <td >
                 <a class="text-decoration-none" asp-action="Edit" asp-route-id="@component.Id" title="Edit">
-                        <i class="fa-sharp fa-solid fa-gear"></i>
+                        <i class="fa-sharp fa-solid fa-gear "></i>
                 </a> 
                 <a class="text-decoration-none ms-2" asp-action="Details" asp-route-id="@component.Id" title="Details">
-                        <i class="fa-sharp fa-solid fa-circle-info"></i>
+                        <i class="fa-sharp fa-solid fa-circle-info text-warning"></i>
                 </a> 
                     <a class="text-decoration-none ms-2" data-bs-toggle="modal" data-bs-target="#DeleteComponent_@component.Id">
-                        <i class="fa-sharp fa-solid fa-trash-can"></i>
+                        <i class="fa-sharp fa-solid fa-trash-can text-danger"></i>
                 </a>
 
                 <!-- Modal -->

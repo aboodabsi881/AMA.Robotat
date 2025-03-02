@@ -1,4 +1,4 @@
-﻿@using AMA.Robotat.Mvc.Models.Meals
+﻿@using AMA.Robotat.Mvc.Models.Robots
 @model CreateUpdateRobotViewModel
 
 @{
@@ -29,7 +29,7 @@
 
             <div class="form-group mb-3">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">

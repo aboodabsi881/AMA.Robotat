@@ -1,5 +1,5 @@
 ﻿using AMA.Robotat.Entities.Robots;
-using AMA.Robotat.Mvc.Models.Meals;
+using AMA.Robotat.Mvc.Models.Robots;
 using AutoMapper;
 
 namespace AMA.Robotat.Mvc.AutoMapperProfiles

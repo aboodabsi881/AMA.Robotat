@@ -1,7 +1,7 @@
 ﻿using AMA.Robotat.Mvc.Models.Components;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AMA.Robotat.Mvc.Models.Meals
+namespace AMA.Robotat.Mvc.Models.Robots
 {
     public class RobotDetailsViewModel
     {

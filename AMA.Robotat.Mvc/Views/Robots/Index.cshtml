@@ -1,8 +1,8 @@
-﻿@using AMA.Robotat.Mvc.Models.Meals
+﻿@using AMA.Robotat.Mvc.Models.Robots
 @model IEnumerable<RobotViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Robots";
 }
 
 <h1>Robots</h1>
@@ -34,14 +34,14 @@
                 @Html.DisplayFor(modelItem => robot.Price)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@robot.Id">
-                        <i class="fa-sharp fa-solid fa-gear"></i>
+                <a class="text-decoration-none" asp-action="Edit" asp-route-id="@robot.Id">
+                        <i class="fa-sharp fa-solid fa-gear "></i>
                 </a>
-                <a asp-action="Details" asp-route-id="@robot.Id">
-                        <i class="fa-sharp fa-solid fa-circle-info"></i>
+                    <a class="text-decoration-none ms-2" asp-action="Details" asp-route-id="@robot.Id">
+                        <i class="fa-sharp fa-solid fa-circle-info text-warning"></i>
                 </a>
-                    <a class="text-decoration-none ms-2" data-bs-toggle="modal" data-bs-target="#DeleteComponent_@robot.Id">
-                        <i class="fa-sharp fa-solid fa-trash-can"></i>
+                    <a  class="text-decoration-none ms-2" data-bs-toggle="modal" data-bs-target="#DeleteComponent_@robot.Id">
+                        <i class="fa-sharp fa-solid fa-trash-can text-danger"></i>
                     </a>
 
                     <!-- Modal -->

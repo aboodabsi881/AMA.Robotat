@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using AMA.Robotat.Entities.Robots;
 using AMA.Robotat.Mvc.Data;
 using AutoMapper;
-using AMA.Robotat.Mvc.Models.Meals;
+using AMA.Robotat.Mvc.Models.Robots;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using AMA.Robotat.Entities.Components;
 using System.Numerics;

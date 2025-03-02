@@ -1,0 +1,92 @@
+﻿@using AMA.Robotat.Mvc.Models.Orders
+@model IEnumerable<OrderViewModel>
+
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<h1>Orders</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create a New Order</a>
+</p>
+<table class="table table-hover data-tables ">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerFullName)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Location)
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var order in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => order.OrderTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => order.TotalPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => order.CustomerFullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => order.Location)   
+            </td>
+                <td>
+                    <a class="text-decoration-none" asp-action="Edit" asp-route-id="@order.Id">
+                        <i class="fa-sharp fa-solid fa-gear "></i>
+                    </a>
+                    <a class="text-decoration-none ms-2" asp-action="Details" asp-route-id="@order.Id">
+                        <i class="fa-sharp fa-solid fa-circle-info text-warning"></i>
+                    </a>
+                    <a class="text-decoration-none ms-2" data-bs-toggle="modal" data-bs-target="#DeleteComponent_@order.Id">
+                        <i class="fa-sharp fa-solid fa-trash-can text-danger"></i>
+                    </a>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="DeleteComponent_@order.Id" tabindex="-1" aria-labelledby="DeleteOrderLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="DeleteOrderLabel">Delete <span>Delete Order</span></h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <h3>
+                                        Are you sure you want to delete <span class="text-danger">@order.CustomerFullName</span>
+                                    </h3>
+                                </div>
+                                <div class="modal-footer">
+
+                                    <form asp-action="Delete">
+                                        <input type="hidden" name="id" value="@order.Id" />
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <input type="submit" value="Delete" class="btn btn-danger ms-2" />
+                                    </form>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </td>
+        </tr>
+}
+    </tbody>
+</table>

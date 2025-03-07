@@ -18,7 +18,7 @@ namespace AMA.Robotat.Entities.Orders
         [Column(TypeName = "decimal(6,2)")]
         public decimal TotalPrice{ get; set; }
         public int CustomerId { get; set; }
-        public Customer Costomer { get; set; }
+        public Customer Customer { get; set; }
         public string? Note { get; set; }
         public Location Location { get; set; }
         public List<Robot> Robots { get; set; } = [];

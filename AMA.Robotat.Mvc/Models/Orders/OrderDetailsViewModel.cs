@@ -12,6 +12,7 @@ namespace AMA.Robotat.Mvc.Models.Orders
         public DateTime OrderTime { get; set; }
         [Column(TypeName = "decimal(6,2)")]
         public decimal TotalPrice { get; set; }
+        public int CustomerId { get; set; }
         public string CustomerFullName { get; set; }
         public string? Note { get; set; }
         public Location Location { get; set; }

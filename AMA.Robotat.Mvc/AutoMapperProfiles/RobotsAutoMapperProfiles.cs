@@ -10,11 +10,14 @@ namespace AMA.Robotat.Mvc.AutoMapperProfiles
         {
             CreateMap<Robot, RobotViewModel>();
             CreateMap<Robot, RobotDetailsViewModel>();
-            CreateMap<CreateUpdateRobotViewModel, Robot>().ReverseMap()
-                .ForMember(createUpdateRobotViewModel => createUpdateRobotViewModel
+            CreateMap<CreateUpdateRobotViewModel, Robot>().ReverseMap();
+
+            /*
+             .ForMember(createUpdateRobotViewModel => createUpdateRobotViewModel
                                     .ComponentsIds
                                           , opts => 
                                                 opts.MapFrom(robot => robot.Components.Select(robot => robot.Id)));
+             */
         }
     }
 }

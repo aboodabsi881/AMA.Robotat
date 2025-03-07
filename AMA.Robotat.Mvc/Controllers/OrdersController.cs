@@ -6,6 +6,8 @@ using AMA.Robotat.Mvc.Data;
 using AutoMapper;
 using AMA.Robotat.Mvc.Models.Orders;
 using AMA.Robotat.Entities.Robots;
+using AMA.Robotat.Entities.Customers;
+using AMA.Robotat.Mvc.Models.Customers;
 
 namespace AMA.Robotat.Mvc.Controllers
 {
@@ -24,7 +26,7 @@ namespace AMA.Robotat.Mvc.Controllers
         {
             var orders =  await _context
                                     .Orders
-                                        .Include(order => order.Costomer)
+                                        .Include(order => order.Customer)
                                         .Include(order => order.Robots)
                                         .ToListAsync();
 
@@ -41,7 +43,7 @@ namespace AMA.Robotat.Mvc.Controllers
             }
 
             var order = await _context.Orders
-                                        .Include(o => o.Costomer)
+                                        .Include(o => o.Customer)
                                             .Include(o => o.Robots)
                                                 .Where(m => m.Id == id)
                                                     .SingleOrDefaultAsync();
@@ -63,15 +65,17 @@ namespace AMA.Robotat.Mvc.Controllers
             };
             return View(order);
         }
-
+        
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateUpdateOrderViewModel createUpdateOrderVM)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid) 
             {
                 var order = _mapper.Map<Order>(createUpdateOrderVM);
+
+                order.OrderTime = DateTime.Now;
 
                 await UpdateOrderRobots(order, createUpdateOrderVM.RobotsIds);
 
@@ -83,8 +87,8 @@ namespace AMA.Robotat.Mvc.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            createUpdateOrderVM.CustomersLookup = new SelectList(_context.Customers, "Id", "FullName", createUpdateOrderVM.CustomerId);
-            createUpdateOrderVM.RobotLookup = new MultiSelectList(_context.Robots, "Id", "Name", createUpdateOrderVM.RobotsIds);
+            createUpdateOrderVM.CustomersLookup = new SelectList(_context.Customers, "Id", "FullName");
+            createUpdateOrderVM.RobotLookup = new MultiSelectList(_context.Robots, "Id", "Name");
 
             return View(createUpdateOrderVM);
         }
@@ -98,46 +102,67 @@ namespace AMA.Robotat.Mvc.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders
+                                            .Include(o => o.Customer)
+                                            .Include(o => o.Robots)
+                                                .Where(m => m.Id == id)
+                                                    .SingleOrDefaultAsync();
+
             if (order == null)
             {
                 return NotFound();
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address", order.CustomerId);
-            return View(order);
+
+            var createUpdateOrderVM = _mapper.Map<CreateUpdateOrderViewModel>(order);
+            createUpdateOrderVM.RobotsIds = order.Robots.Select(robot => robot.Id).ToList();
+            createUpdateOrderVM.CustomersLookup = new SelectList(_context.Customers, "Id", "FullName");
+            createUpdateOrderVM.RobotLookup = new MultiSelectList(_context.Robots, "Id", "Name");
+
+            return View(createUpdateOrderVM);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,OrderTime,TotalPrice,CustomerId,Note,Location")] Order order)
+        public async Task<IActionResult> Edit(int id, CreateUpdateOrderViewModel createUpdateOrderVM)
         {
-            if (id != order.Id)
+            if (id != createUpdateOrderVM.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
+                var order = await _context.Orders
+                                          .Include(o => o.Customer)
+                                            .Include(o => o.Robots)
+                                                .Where(m => m.Id == id)
+                                                    .SingleOrDefaultAsync();
+
+                if (order == null)
                 {
-                    _context.Update(order);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!OrderExists(order.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+
+                _mapper.Map(createUpdateOrderVM, order);
+
+                order.OrderTime = DateTime.Now;
+
+                await UpdateOrderRobots(order, createUpdateOrderVM.RobotsIds);
+
+                order.TotalPrice = GetOrderPrice(order.Robots);
+
+                _context.Update(order);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address", order.CustomerId);
-            return View(order);
+
+            createUpdateOrderVM.CustomersLookup = new SelectList(_context.Customers, "Id", "FullName", createUpdateOrderVM.CustomerId);
+            createUpdateOrderVM.RobotLookup = new MultiSelectList(_context.Robots, "Id", "Name", createUpdateOrderVM.RobotsIds);
+
+            return View(createUpdateOrderVM);
+
+
         }
 
         [HttpPost]
@@ -174,14 +199,14 @@ namespace AMA.Robotat.Mvc.Controllers
         private async Task UpdateOrderCustomers(Order order,int customerId)
         {
             //Clear Robot Components
-            order.Costomer = null;
+            order.Customer = null;
             //Get Components from the DB
             var customer = await _context
                                         .Customers
                                         .Where(c => c.Id == customerId)
                                         .SingleOrDefaultAsync();
             //Add Components to the Robot
-            order.Costomer = customer;
+            order.Customer = customer;
         }
 
         private decimal GetOrderPrice(List<Robot> robots)

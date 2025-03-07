@@ -1,6 +1,7 @@
 ﻿@using AMA.Robotat.Mvc.Models.Orders
 @model OrderDetailsViewModel
 
+
 @{
     ViewData["Title"] = "Order Details";
 }
@@ -26,7 +27,9 @@
             @Html.DisplayNameFor(model => model.CustomerFullName)
         </dd>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CustomerFullName)
+            <a class="text-decoration-none" asp-action="Details" asp-controller="Customers" asp-route-id="@Model.CustomerId">
+                @Html.DisplayFor(model => model.CustomerFullName)
+            </a>
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Note)
@@ -43,6 +46,7 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-secondary me-2">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit</a> 
+    
 </div>

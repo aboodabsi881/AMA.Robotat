@@ -102,6 +102,7 @@ namespace AMA.Robotat.Mvc.Controllers
             }
 
             var createUpdateRobotVM = _mapper.Map<CreateUpdateRobotViewModel>(robot);
+            createUpdateRobotVM.ComponentsIds = robot.Components.Select(component => component.Id).ToList();
             createUpdateRobotVM.ComponentLookup = new MultiSelectList(_context.Components, "Id", "Name");
 
             return View(createUpdateRobotVM);
